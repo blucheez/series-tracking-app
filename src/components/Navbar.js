@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom'
 
 function Navbar() {
   return (
-    <nav class='navbar navbar-expand-sm navbar-dark bg-dark'>
-      <div class='container-fluid'>
+    <nav className='navbar navbar-expand-sm navbar-dark bg-dark '>
+      <div className='container-fluid'>
         <Link
-          class='navbar-brand d-flex justify-content-center align-items-center'
-          to='#'
+          className='navbar-brand d-flex justify-content-center align-items-center'
+          to='/'
         >
-          <SiPivotaltracker className='fs-2 me-2' />
+          <SiPivotaltracker className='fs-5 me-2' />
           Series Tracker
         </Link>
         <button
-          class='navbar-toggler'
+          className='navbar-toggler'
           type='button'
           data-bs-toggle='collapse'
           data-bs-target='#navbarSupportedContent'
@@ -21,23 +21,28 @@ function Navbar() {
           aria-expanded='false'
           aria-label='Toggle navigation'
         >
-          <span class='navbar-toggler-icon'></span>
+          <span className='navbar-toggler-icon'></span>
         </button>
-        <div class='collapse navbar-collapse' id='navbarSupportedContent'>
-          <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
-            <li class='nav-item'>
-              <Link class='nav-link active' aria-current='page' to='#'>
+        <div className='collapse navbar-collapse' id='navbarSupportedContent'>
+          <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
+            <li className='nav-item'>
+              <Link className='nav-link active' aria-current='page' to='/'>
                 Home
               </Link>
             </li>
-            <li class='nav-item'>
-              <Link class='nav-link' to='#'>
-                Link
+            <li className='nav-item'>
+              <Link className='nav-link' to='#'>
+                Series
               </Link>
             </li>
-            <li class='nav-item dropdown'>
+            <li className='nav-item'>
+              <Link className='nav-link' to='#'>
+                Calendar
+              </Link>
+            </li>
+            {/* <li className='nav-item dropdown'>
               <Link
-                class='nav-link dropdown-toggle'
+                className='nav-link dropdown-toggle'
                 to='#'
                 role='button'
                 data-bs-toggle='dropdown'
@@ -45,42 +50,47 @@ function Navbar() {
               >
                 Dropdown
               </Link>
-              <ul class='dropdown-menu'>
+              <ul className='dropdown-menu'>
                 <li>
-                  <Link class='dropdown-item' to='#'>
+                  <Link className='dropdown-item' to='#'>
                     Action
                   </Link>
                 </li>
                 <li>
-                  <Link class='dropdown-item' to='#'>
+                  <Link className='dropdown-item' to='#'>
                     Another action
                   </Link>
                 </li>
                 <li>
-                  <hr class='dropdown-divider' />
+                  <hr className='dropdown-divider' />
                 </li>
                 <li>
-                  <Link class='dropdown-item' to='#'>
+                  <Link className='dropdown-item' to='#'>
                     Something else here
                   </Link>
                 </li>
               </ul>
-            </li>
-            <li class='nav-item'>
-              <Link class='nav-link disabled'>Disabled</Link>
-            </li>
+            </li> */}
           </ul>
-          <form class='d-flex' role='search'>
-            <input
-              class='form-control me-2'
-              type='search'
-              placeholder='Search'
-              aria-label='Search'
-            />
-            <button class='btn btn-outline-warning' type='submit'>
-              Search
+          {/* <form className='d-flex' role='search'>
+              <input
+                className='form-control me-2'
+                type='search'
+                placeholder='Search'
+                aria-label='Search'
+              />
+              <button className='btn btn-outline-warning' type='submit'>
+                Go
+              </button>
+            </form> */}
+          <div>
+            <button className='btn btn-outline-warning me-2' type='submit'>
+              Log in
             </button>
-          </form>
+            <button className='btn btn-outline-warning' type='submit'>
+              Register
+            </button>
+          </div>
         </div>
       </div>
     </nav>
