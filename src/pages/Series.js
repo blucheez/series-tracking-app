@@ -6,6 +6,7 @@ function Series() {
   const [seriesData, setSeriesData] = useState('')
 
   const handleOnChange = (e) => {
+    e.preventDefault()
     setSearchText(e.target.value)
   }
 
@@ -28,7 +29,7 @@ function Series() {
     <div className='container'>
       <div className='my-5 col col-5'>
         <form>
-          <label htmlFor='search' className='form-label'>
+          <label htmlFor='search' className='form-label display-6'>
             Search
           </label>
           <input
@@ -37,6 +38,7 @@ function Series() {
             name='search'
             id='search'
             onChange={handleOnChange}
+            placeholder="Start typing..."
           />
           {/* <button className='btn btn-outline-warning' type='submit'>
             Go!
