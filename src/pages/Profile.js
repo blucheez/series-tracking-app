@@ -1,17 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getAuth, updateProfile } from 'firebase/auth'
 import { db } from '../firebase.config'
-import { doc, updateDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { toast } from 'react-toastify'
+import SeriesCard from '../components/SeriesCard'
 
 function Profile() {
-  /* const navigate = useNavigate() */
   const auth = getAuth()
   const [edit, setEdit] = useState(false)
   const [userData, setUserData] = useState({
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
   })
+  const [watchlistIDs, setWatchlistIDs] = useState([])
+  const [watchlistDetailed, setWatchlistDetailed] = useState([])
 
   const onSubmit = async () => {
     try {
@@ -36,6 +38,40 @@ function Profile() {
       [e.target.name]: e.target.value,
     }))
   }
+  // set currently watched show to state
+  useEffect(() => {
+    const getWatchlist = async () => {
+      const userRef = doc(db, 'users', auth.currentUser.uid)
+      const docSnap = await getDoc(userRef)
+      const userDoc = docSnap.data()
+      setWatchlistIDs(userDoc.watching)
+    }
+    getWatchlist()
+  }, [])
+  // get data for each id
+  useEffect(() => {
+    const fetchShow = async (showID) => {
+      const queryURL = `https://api.tvmaze.com/shows/${showID}`
+
+      const response = await fetch(queryURL)
+      const result = await response.json()
+      if (result) {
+        /*  console.log(result) */
+        return result
+      }
+    }
+    const addToState = async () => {
+      let showArr = []
+      for (let id of watchlistIDs) {
+        showArr.push(await fetchShow(id))
+      }
+      setWatchlistDetailed(showArr)
+    }
+    addToState()
+  }, [watchlistIDs])
+
+  console.log(watchlistIDs)
+  console.log(watchlistDetailed)
 
   return (
     <>
@@ -80,7 +116,7 @@ function Profile() {
                 type='email'
                 name='email'
                 id='email'
-                className={`form-control ${'bg-secondary text-white'}`}
+                className={`form-control ${'bg-secondary'}`}
                 value={userData.email}
                 disabled
                 readOnly={!edit}
@@ -91,6 +127,15 @@ function Profile() {
               </div>
             </div>
           </form>
+          <div>
+            <div className='display-6 mt-4'>Currently watching</div>
+            <div className='d-flex flex-wrap'>
+              {watchlistDetailed &&
+                watchlistDetailed.map((tvShow, i) => {
+                  return <SeriesCard key={i} data={tvShow} />
+                })}
+            </div>
+          </div>
         </div>
       </div>
     </>
