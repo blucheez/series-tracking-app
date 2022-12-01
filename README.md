@@ -16,7 +16,7 @@ More functionality will be available later...
 - react-toastify
 
 # Deployment:
-- Vercel: https://house-marketplace-lilac.vercel.app/
+- Vercel: https://series-tracking-app.vercel.app/
 
 
 # Create React App
