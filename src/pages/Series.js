@@ -40,9 +40,6 @@ function Series() {
             onChange={handleOnChange}
             placeholder="Start typing..."
           />
-          {/* <button className='btn btn-outline-warning' type='submit'>
-            Go!
-          </button> */}
         </form>
       </div>
       <div className='d-flex flex-wrap'>

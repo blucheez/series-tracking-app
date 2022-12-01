@@ -1,15 +1,33 @@
 import missing from '../assets/missing.jpg'
 import { getAuth } from 'firebase/auth'
 import { db } from '../firebase.config'
-import { doc, getDoc, setDoc, arrayUnion } from 'firebase/firestore'
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from 'firebase/firestore'
 import { toast } from 'react-toastify'
+import { useLocation } from 'react-router-dom'
 
 function SeriesCard(props) {
-  const { id, name, premiered, image, genres, rating, externals, ended } =
-    props.data
+  const {
+    id,
+    name,
+    premiered,
+    image,
+    genres,
+    rating,
+    externals,
+    ended,
+    summary,
+  } = props.data
 
   const imdbURL = `https://www.imdb.com/title/${externals.imdb}`
 
+  const location = useLocation()
   const auth = getAuth()
   const handleAddToAcc = async () => {
     try {
@@ -23,6 +41,7 @@ function SeriesCard(props) {
           ...currentData,
           watching: arrayUnion(...currentData.watching, id),
         })
+        toast.success('Show added to watchlist')
       } else {
         // doc.data() will be undefined in this case
         toast.error('Could not add to watchlist')
@@ -31,12 +50,30 @@ function SeriesCard(props) {
       toast.error(error.code)
     }
   }
+  const handleRemoveFromAcc = async () => {
+    try {
+      const userRef = doc(db, 'users', auth.currentUser.uid)
+
+      await updateDoc(userRef, {
+        watching: arrayRemove(id),
+      })
+      toast.success('Show removed from watchlist')
+    } catch (error) {
+      toast.error('Could not remove from watchlist')
+    }
+  }
+
+  const formatSumm = (text) => {
+    const textArr = text.split(' ')
+    const newArr = textArr.map((word) => word.replace(/(<([^>]+)>)/gi, ''))
+    return newArr.join(' ')
+  }
 
   return (
     <div className='m-3'>
       <div
         className='card'
-        style={{ width: '13rem', backgroundColor: '#222529' }}
+        style={{ width: '12rem', backgroundColor: '#222529' }}
       >
         <img
           src={image ? image.medium : missing}
@@ -45,7 +82,9 @@ function SeriesCard(props) {
         />
         <div className='card-body'>
           <h5 className='card-title'>{name}</h5>
-          <p className='card-title'>{premiered && premiered.slice(0, 4)}</p>
+          <p className='card-title'>
+            {premiered ? premiered.slice(0, 4) : '-'}
+          </p>
           <p className='card-text'>
             <small className='text-muted'>{genres && genres.join(', ')}</small>
           </p>
@@ -88,15 +127,76 @@ function SeriesCard(props) {
               </span>
             )}
           </li>
-          <li className='list-group-item bg-transparent text-white'>
-            Status:{' '}
-            {ended ? <div>Ended: {ended.replaceAll('-', '.')}</div> : 'Running'}
+          <li className='list-group-item bg-transparent text-white text-center'>
+            <button
+              className='btn btn-outline-info'
+              data-bs-toggle='modal'
+              data-bs-target={`#Modal${id}`}
+            >
+              Details
+            </button>
+            <div
+              className='modal fade text-white'
+              id={`Modal${id}`}
+              tabIndex='-1'
+              aria-labelledby='ModalLabel'
+              aria-hidden='true'
+            >
+              <div className='modal-dialog'>
+                <div className='modal-content bg-dark text-white'>
+                  <div className='modal-header'>
+                    <h1 className='modal-title fs-5' id='ModalLabel'>
+                      {name}
+                    </h1>
+                    <button
+                      className='btn-close btn-close-white'
+                      data-bs-dismiss='modal'
+                      aria-label='Close'
+                    ></button>
+                  </div>
+                  <div className='modal-body text-start'>
+                    <div>
+                      {summary ? formatSumm(summary) : 'No available summary'}
+                    </div>
+                    <div className='mt-3'>
+                      Status:{' '}
+                      {ended
+                        ? `ended on ${ended.replaceAll('-', '.')}`
+                        : 'running'}
+                    </div>
+                  </div>
+                  <div className='modal-footer'>
+                    <button
+                      type='button'
+                      className='btn btn-secondary'
+                      data-bs-dismiss='modal'
+                    >
+                      Close
+                    </button>
+                    {location.pathname !== '/profile' && (
+                      <button
+                        className='btn btn-success'
+                        onClick={handleAddToAcc}
+                      >
+                        Add to watchlist
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
         <div className='card-body text-center'>
-          <button className='btn btn-success' onClick={handleAddToAcc}>
-            Add to watchlist
-          </button>
+          {location.pathname !== '/profile' ? (
+            <button className='btn btn-success' onClick={handleAddToAcc}>
+              Add to watchlist
+            </button>
+          ) : (
+            <button className='btn btn-danger' onClick={handleRemoveFromAcc}>
+              Remove
+            </button>
+          )}
         </div>
       </div>
     </div>
