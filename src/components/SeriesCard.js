@@ -76,7 +76,7 @@ function SeriesCard(props) {
         style={{ width: '12rem', backgroundColor: '#222529' }}
       >
         <img
-          src={image.medium ? image.medium : missing}
+          src={image && image.medium !== null ? image.medium : missing}
           className='card-img-top'
           alt={name}
         />

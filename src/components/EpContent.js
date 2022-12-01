@@ -1,5 +1,5 @@
 import { useState } from 'react'
-
+import missing from '../assets/missing.jpg'
 function EpContent(props) {
 
   const { season, image, name, id, number, summary } = props.data
@@ -17,7 +17,7 @@ function EpContent(props) {
       {season === currentSeason && (
         <div className='col' style={{ height: '20rem' }} key={id}>
           <div className='card bg-dark'>
-            <img src={image.medium} className='card-img-top' alt='...' />
+            <img src={image && image.medium !== null ? image.medium : missing} className='card-img-top' alt='...' />
             <div className='card-body'>
               <p className='card-title fs-5'>{name}</p>
               <p className='card-text'>{`S${season}E${number}`}</p>
