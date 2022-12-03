@@ -30,7 +30,7 @@ function Series() {
       <div className='my-5 col col-5'>
         <form>
           <label htmlFor='search' className='form-label display-6'>
-            Search
+            Search for TV series
           </label>
           <input
             className='form-control'
@@ -38,15 +38,18 @@ function Series() {
             name='search'
             id='search'
             onChange={handleOnChange}
-            placeholder="Start typing..."
+            placeholder='Start typing...'
           />
         </form>
       </div>
-      <div className='d-flex flex-wrap'>
-        {seriesData &&
+      <div className='d-flex flex-wrap justify-content-sm-center'>
+        {seriesData ? (
           seriesData.map((tvShow, i) => {
             return <SeriesCard key={i} data={tvShow.show} />
-          })}
+          })
+        ) : (
+          <div className='text-warning'>No results</div>
+        )}
       </div>
     </div>
   )

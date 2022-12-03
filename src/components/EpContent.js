@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import missing from '../assets/missing.jpg'
 function EpContent(props) {
-
   const { season, image, name, id, number, summary } = props.data
   const currentSeason = props.currentSeason
   const [watched, setWatched] = useState(false)
@@ -11,17 +10,25 @@ function EpContent(props) {
     const newArr = textArr.map((word) => word.replace(/(<([^>]+)>)/gi, ''))
     return newArr.join(' ')
   }
-  
+
   return (
     <>
       {season === currentSeason && (
-        <div className='col' style={{ height: '20rem' }} key={id}>
-          <div className='card bg-dark'>
-            <img src={image && image.medium !== null ? image.medium : missing} className='card-img-top' alt='...' />
+        <div className='col d-flex align-items-stretch' key={id}>
+          <div
+            className='card bg-dark border-secondary mb-2'
+            /* style={{ maxWidth: '12rem', backgroundColor: '#222529' }} */
+          >
+            <img
+              src={image && image.medium !== null ? image.medium : missing}
+              className='card-img-top'
+              alt='...'
+            />
             <div className='card-body'>
               <p className='card-title fs-5'>{name}</p>
               <p className='card-text'>{`S${season}E${number}`}</p>
             </div>
+
             <div className='card-footer d-flex justify-content-around flex-wrap'>
               <button
                 className='btn btn-outline-info mb-2 mb-xxl-0'
@@ -51,9 +58,7 @@ function EpContent(props) {
                     </div>
                     <div className='modal-body text-start'>
                       <div>
-                        {summary
-                          ? formatSumm(summary)
-                          : 'No available summary'}
+                        {summary ? formatSumm(summary) : 'No available summary'}
                       </div>
                     </div>
                     <div className='modal-footer'>

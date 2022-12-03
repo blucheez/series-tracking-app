@@ -18,14 +18,16 @@ function EpisodeCard(props) {
   }, [props.data._embedded.episodes, episodes])
 
   return (
-    <>
-      <div className='fs-5'>Seasons:</div>
+    <div>
+      <div className='fs-5'>Season:</div>
       <div className='d-flex flex-wrap mt-2'>
         {_embedded.seasons.map((season, i) => {
           return (
             <button
               key={i}
-              className='btn btn-outline-info btn-sm me-2'
+              className={`btn ${
+                currentSeason === i + 1 ? 'btn-info' : 'btn-outline-info'
+              } btn-sm me-2 mb-2 mb-xl-0`}
               value={i + 1}
               onClick={handleCurrentSeason}
             >
@@ -41,7 +43,7 @@ function EpisodeCard(props) {
           })}
         </div>
       </div>
-    </>
+    </div>
   )
 }
 export default EpisodeCard

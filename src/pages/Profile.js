@@ -75,7 +75,6 @@ function Profile() {
     }
     addToState()
   }, [watchlistIDs])
-  console.log(watchlistDetailed)
 
   return (
     <>
@@ -133,14 +132,14 @@ function Profile() {
           </form>
         </div>
         <div>
-          <div className='display-6 mt-4'>Currently watching</div>
+          <div className='display-6 mt-5 mb-3'>Currently watching</div>
           <table className='table table-dark table-striped mt-2'>
             <tbody>
               {watchlistDetailed &&
                 watchlistDetailed.map((tvShow, i) => {
                   return (
-                    <tr key={i}>
-                      <td className=''>
+                    <tr key={i}  className="rounded">
+                      <td>
                         <SeriesCard key={i} data={tvShow} />
               
                       </td>
