@@ -1,14 +1,43 @@
 import { useState } from 'react'
 import missing from '../assets/missing.jpg'
+import { getAuth } from 'firebase/auth'
+import { db } from '../firebase.config'
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from 'firebase/firestore'
+import { toast } from 'react-toastify'
+
 function EpContent(props) {
+  const auth = getAuth()
   const { season, image, name, id, number, summary } = props.data
   const currentSeason = props.currentSeason
+  const seriesID = props.seriesID
   const [watched, setWatched] = useState(false)
 
   const formatSumm = (text) => {
     const textArr = text.split(' ')
     const newArr = textArr.map((word) => word.replace(/(<([^>]+)>)/gi, ''))
     return newArr.join(' ')
+  }
+
+  const handleWatched = async () => {
+    setWatched((prev) => !prev)
+
+    try {
+      const userRef = doc(db, 'users', auth.currentUser.uid)
+      const watchedEp = { [id]: true }
+      await updateDoc(userRef, {
+        watchedEpisodes: [{ seriesID, watchedEp }],
+      })
+      toast.success('Done!')
+    } catch (error) {
+      toast.error('There was a database error')
+    }
   }
 
   return (
@@ -80,7 +109,7 @@ function EpContent(props) {
                   id={`btn-check-outlined-${id}`}
                   autoComplete='off'
                   checked={watched}
-                  onChange={() => setWatched((prev) => !prev)}
+                  onChange={handleWatched}
                 />
                 <label
                   className='btn btn-outline-warning'

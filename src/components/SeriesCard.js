@@ -39,6 +39,10 @@ function SeriesCard(props) {
 
         await setDoc(userRef, {
           ...currentData,
+          watching: [id],
+          /* watching: arrayUnion(...currentData.watching, { seriesID: id }), */
+        })
+        await updateDoc(userRef, {
           watching: arrayUnion(...currentData.watching, id),
         })
         toast.success('Show added to watchlist')

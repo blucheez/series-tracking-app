@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import EpContent from './EpContent'
 
 function EpisodeCard(props) {
-  const { _embedded } = props.data
+  const { _embedded, id } = props.data
+  const seriesID = id
 
   const [episodes, setEpisodes] = useState([])
   const [currentSeason, setCurrentSeason] = useState(1)
@@ -39,7 +40,7 @@ function EpisodeCard(props) {
       <div className='mt-3 pe-3'>
         <div className='row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-1'>
           {episodes.map((ep, i) => {
-            return <EpContent key={i} data={ep} currentSeason={currentSeason} />
+            return <EpContent key={i} data={ep} currentSeason={currentSeason} seriesID={seriesID}/>
           })}
         </div>
       </div>

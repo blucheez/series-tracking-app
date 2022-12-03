@@ -47,7 +47,9 @@ function Profile() {
 
       onSnapshot(userRef, (doc) => {
         const userDoc = doc.data()
-        setWatchlistIDs(userDoc.watching)
+        if (userDoc.watching) {
+          setWatchlistIDs(userDoc.watching)
+        }
       })
       /*  const userDoc = docSnap.data()
       setWatchlistIDs(userDoc.watching) */
@@ -138,13 +140,12 @@ function Profile() {
               {watchlistDetailed &&
                 watchlistDetailed.map((tvShow, i) => {
                   return (
-                    <tr key={i}  className="rounded">
+                    <tr key={i} className='rounded'>
                       <td>
                         <SeriesCard key={i} data={tvShow} />
-              
                       </td>
                       <td>
-                        <EpisodeCard key={i} data={tvShow}/>
+                        <EpisodeCard key={i} data={tvShow} />
                       </td>
                     </tr>
                   )
