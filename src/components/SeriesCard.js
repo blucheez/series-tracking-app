@@ -36,16 +36,17 @@ function SeriesCard(props) {
 
       if (docSnap.exists()) {
         const currentData = docSnap.data()
-
-        await setDoc(userRef, {
-          ...currentData,
-          watching: [id],
-          /* watching: arrayUnion(...currentData.watching, { seriesID: id }), */
-        })
-        await updateDoc(userRef, {
-          watching: arrayUnion(...currentData.watching, id),
-        })
-        toast.success('Show added to watchlist')
+        if (!currentData.watchedEpisodes) {
+          await setDoc(userRef, {
+            ...currentData,
+            watching: [id],
+            watchedEpisodes: [],
+          })
+          await updateDoc(userRef, {
+            watching: arrayUnion(...currentData.watching, id),
+          })
+          toast.success('Show added to watchlist')
+        }
       } else {
         // doc.data() will be undefined in this case
         toast.error('Could not add to watchlist')

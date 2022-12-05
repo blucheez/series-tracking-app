@@ -2,3 +2,7 @@ body {
   background-color: #41474f;
   color: white;
 }
+
+.darkened-card {
+  opacity: 0.5;
+}

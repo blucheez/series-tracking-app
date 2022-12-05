@@ -4,19 +4,19 @@ import { getAuth } from 'firebase/auth'
 import { db } from '../firebase.config'
 import {
   doc,
+  onSnapshot,
   getDoc,
-  setDoc,
   updateDoc,
   arrayUnion,
   arrayRemove,
 } from 'firebase/firestore'
 import { toast } from 'react-toastify'
+import { useEffect } from 'react'
 
 function EpContent(props) {
   const auth = getAuth()
   const { season, image, name, id, number, summary } = props.data
   const currentSeason = props.currentSeason
-  const seriesID = props.seriesID
   const [watched, setWatched] = useState(false)
 
   const formatSumm = (text) => {
@@ -26,19 +26,50 @@ function EpContent(props) {
   }
 
   const handleWatched = async () => {
-    setWatched((prev) => !prev)
+    /* setWatched((prev) => !prev) */
 
     try {
       const userRef = doc(db, 'users', auth.currentUser.uid)
-      const watchedEp = { [id]: true }
-      await updateDoc(userRef, {
-        watchedEpisodes: [{ seriesID, watchedEp }],
-      })
-      toast.success('Done!')
+      if (watched) {
+        await updateDoc(userRef, {
+          watchedEpisodes: arrayRemove(id),
+        })
+        setWatched(false)
+        toast.info(`You unwatched ${episodeText}`)
+      } else {
+        const docSnap = await getDoc(userRef)
+        if (docSnap.exists()) {
+          const currentData = docSnap.data()
+          if (currentData.watchedEpisodes) {
+            await updateDoc(userRef, {
+              watchedEpisodes: arrayUnion(id),
+            })
+
+            toast.success(`You watched ${episodeText}`)
+          }
+        }
+      }
     } catch (error) {
       toast.error('There was a database error')
+      console.log(error)
     }
   }
+
+  const episodeText = `S${season}E${number}`
+
+  useEffect(() => {
+    const getWatchedEpisode = async () => {
+      const userRef = doc(db, 'users', auth.currentUser.uid)
+      onSnapshot(userRef, (doc) => {
+        const userDoc = doc.data()
+        if (userDoc.watchedEpisodes.includes(id)) {
+          setWatched(true)
+        }
+      })
+    }
+    getWatchedEpisode()
+    // eslint-disable-next-line
+  }, [])
 
   return (
     <>
@@ -50,12 +81,13 @@ function EpContent(props) {
           >
             <img
               src={image && image.medium !== null ? image.medium : missing}
-              className='card-img-top'
+              className={`card-img-top ${watched && 'darkened-card'}`}
               alt='...'
             />
-            <div className='card-body'>
+
+            <div className={`card-body ${watched && 'darkened-card'}`}>
               <p className='card-title fs-5'>{name}</p>
-              <p className='card-text'>{`S${season}E${number}`}</p>
+              <p className='card-text'>{episodeText}</p>
             </div>
 
             <div className='card-footer d-flex justify-content-around flex-wrap'>
