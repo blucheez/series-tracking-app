@@ -24,7 +24,9 @@ function Calendar() {
 
   return (
     <div className='container'>
-      <div className='display-5 mt-3'>Streaming today</div>
+      <div className='display-5 mt-3'>
+        Streaming today ({getTodaysDate().replaceAll('-', '.')})
+      </div>
       <table className='table table-dark table-striped my-3'>
         <thead>
           <tr className='d-md-table-row d-none'>
@@ -35,21 +37,23 @@ function Calendar() {
             <th scope='col'>Link to</th>
           </tr>
         </thead>
-        <tbody  className=''>
+        <tbody className=''>
           {today.map((newEp) => {
             return (
               <tr className='align-middle'>
                 <td className='d-md-table-cell d-none'>
                   <img
                     src={newEp._embedded.show.image.medium}
-                    style={{width: '7rem'}}
+                    style={{ width: '7rem' }}
                     alt=''
                     className=''
                   />
                 </td>
                 <td>{newEp._embedded.show.name}</td>
                 <td>{newEp.name}</td>
-                <td className='d-md-table-cell d-none'>{newEp._embedded.show.webChannel.name}</td>
+                <td className='d-md-table-cell d-none'>
+                  {newEp._embedded.show.webChannel.name}
+                </td>
                 <td>
                   <a
                     className='btn btn-outline-info'

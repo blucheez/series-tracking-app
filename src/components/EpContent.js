@@ -100,7 +100,7 @@ function EpContent(props) {
                 aria-hidden='true'
               >
                 <div className='modal-dialog'>
-                  <div className='modal-content bg-dark text-white'>
+                  <div className='modal-content bg-secondary text-white'>
                     <div className='modal-header'>
                       <h1 className='modal-title fs-5' id='ModalLabel'>
                         {name}
@@ -119,7 +119,7 @@ function EpContent(props) {
                     <div className='modal-footer'>
                       <button
                         type='button'
-                        className='btn btn-secondary'
+                        className='btn btn-danger'
                         data-bs-dismiss='modal'
                       >
                         Close

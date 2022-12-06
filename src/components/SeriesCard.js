@@ -1,4 +1,5 @@
 import missing from '../assets/missing.jpg'
+import { useEffect, useState } from 'react'
 import { getAuth } from 'firebase/auth'
 import { db } from '../firebase.config'
 import {
@@ -12,8 +13,10 @@ import {
 import { toast } from 'react-toastify'
 import { useLocation } from 'react-router-dom'
 import { formatSumm } from '../utils/formatSummary'
+import { useAuthStatus } from '../utils/useAuthStatus'
 
 function SeriesCard(props) {
+  const { loggedIn } = useAuthStatus()
   const {
     id,
     name,
@@ -27,33 +30,38 @@ function SeriesCard(props) {
   } = props.data
 
   const imdbURL = `https://www.imdb.com/title/${externals.imdb}`
-
   const location = useLocation()
   const auth = getAuth()
-  const handleAddToAcc = async () => {
-    try {
-      const userRef = doc(db, 'users', auth.currentUser.uid)
-      const docSnap = await getDoc(userRef)
+  const [isLoggedIn, setIsLoggedIn] = useState(null)
 
-      if (docSnap.exists()) {
-        const currentData = docSnap.data()
-        if (!currentData.watchedEpisodes) {
-          await setDoc(userRef, {
-            ...currentData,
-            watching: [id],
-            watchedEpisodes: [],
-          })
+  const handleAddToAcc = async () => {
+    if (!isLoggedIn) {
+      toast.error('You must be logged in')
+    } else {
+      try {
+        const userRef = doc(db, 'users', auth.currentUser.uid)
+        const docSnap = await getDoc(userRef)
+
+        if (docSnap.exists()) {
+          const currentData = docSnap.data()
+          if (!currentData.watchedEpisodes) {
+            await setDoc(userRef, {
+              ...currentData,
+              watching: [id],
+              watchedEpisodes: [],
+            })
+          }
           await updateDoc(userRef, {
             watching: arrayUnion(...currentData.watching, id),
           })
           toast.success('Show added to watchlist')
+        } else {
+          // doc.data() will be undefined in this case
+          toast.error('Could not add to watchlist')
         }
-      } else {
-        // doc.data() will be undefined in this case
-        toast.error('Could not add to watchlist')
+      } catch (error) {
+        toast.error(error.code)
       }
-    } catch (error) {
-      toast.error(error.code)
     }
   }
   const handleRemoveFromAcc = async () => {
@@ -68,6 +76,10 @@ function SeriesCard(props) {
       toast.error('Could not remove from watchlist')
     }
   }
+
+  useEffect(() => {
+    setIsLoggedIn(loggedIn)
+  }, [loggedIn])
 
   return (
     <div className='d-flex'>
@@ -156,7 +168,7 @@ function SeriesCard(props) {
                 aria-hidden='true'
               >
                 <div className='modal-dialog'>
-                  <div className='modal-content bg-dark text-white'>
+                  <div className='modal-content bg-secondary text-white'>
                     <div className='modal-header'>
                       <h1 className='modal-title fs-5' id='ModalLabel'>
                         {name}
@@ -188,7 +200,7 @@ function SeriesCard(props) {
                     <div className='modal-footer'>
                       <button
                         type='button'
-                        className='btn btn-secondary'
+                        className='btn btn-danger'
                         data-bs-dismiss='modal'
                       >
                         Close
