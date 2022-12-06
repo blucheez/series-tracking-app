@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import missing from '../assets/missing.jpg'
 import { getAuth } from 'firebase/auth'
 import { db } from '../firebase.config'
@@ -11,19 +11,13 @@ import {
   arrayRemove,
 } from 'firebase/firestore'
 import { toast } from 'react-toastify'
-import { useEffect } from 'react'
+import { formatSumm } from '../utils/formatSummary'
 
 function EpContent(props) {
   const auth = getAuth()
   const { season, image, name, id, number, summary } = props.data
   const currentSeason = props.currentSeason
   const [watched, setWatched] = useState(false)
-
-  const formatSumm = (text) => {
-    const textArr = text.split(' ')
-    const newArr = textArr.map((word) => word.replace(/(<([^>]+)>)/gi, ''))
-    return newArr.join(' ')
-  }
 
   const handleWatched = async () => {
     /* setWatched((prev) => !prev) */

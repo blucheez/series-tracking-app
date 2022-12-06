@@ -11,6 +11,7 @@ import {
 } from 'firebase/firestore'
 import { toast } from 'react-toastify'
 import { useLocation } from 'react-router-dom'
+import { formatSumm } from '../utils/formatSummary'
 
 function SeriesCard(props) {
   const {
@@ -68,18 +69,12 @@ function SeriesCard(props) {
     }
   }
 
-  const formatSumm = (text) => {
-    const textArr = text.split(' ')
-    const newArr = textArr.map((word) => word.replace(/(<([^>]+)>)/gi, ''))
-    return newArr.join(' ')
-  }
-
   return (
-    <div>
-      <div className='m-3 d-flex align-items-stretch'>
+    <div className='d-flex'>
+      <div className='m-2 d-flex'>
         <div
           className='card border-secondary series-card'
-          style={{ width: '10rem', backgroundColor: '#222529' }}
+          style={{ width: '11rem', backgroundColor: '#222529' }}
         >
           <img
             src={image && image.medium !== null ? image.medium : missing}
@@ -110,7 +105,20 @@ function SeriesCard(props) {
                   </div>
                 </>
               ) : (
-                'No rating'
+                <>
+                  <div>No rating</div>
+                  <div className='progress mt-1' style={{ height: '5px' }}>
+                    <div
+                      className='progress-bar bg-dark progress-bar-striped'
+                      role='progressbar'
+                      aria-label='Rating bar'
+                      style={{ width: `${rating.average * 10}%` }}
+                      aria-valuenow={rating.average * 10}
+                      aria-valuemin='0'
+                      aria-valuemax='100'
+                    ></div>
+                  </div>
+                </>
               )}
             </li>
             <li className='list-group-item bg-transparent text-white'>
@@ -125,7 +133,9 @@ function SeriesCard(props) {
                   link
                 </a>
               ) : (
-                <span className='btn btn-outline-light btn-sm ms-1' disabled>
+                <span
+                  /* className='btn btn-outline-light btn-sm ms-1' */ disabled
+                >
                   not available
                 </span>
               )}

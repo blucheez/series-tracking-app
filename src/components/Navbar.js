@@ -27,7 +27,7 @@ function Navbar() {
   }, [isLoggedIn, loggedIn])
 
   return (
-    <nav className='navbar navbar-expand-sm navbar-dark bg-dark'>
+    <nav className='navbar navbar-expand-sm navbar-dark bg-dark sticky-top'>
       <div className='container-fluid'>
         <Link
           className='navbar-brand d-flex justify-content-center align-items-center'

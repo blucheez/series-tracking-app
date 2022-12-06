@@ -42,7 +42,7 @@ function Series() {
           />
         </form>
       </div>
-      <div className='d-flex flex-wrap justify-content-sm-center'>
+      <div className='d-flex flex-wrap justify-content-sm-center mb-5'>
         {seriesData ? (
           seriesData.map((tvShow, i) => {
             return <SeriesCard key={i} data={tvShow.show} />

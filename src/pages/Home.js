@@ -1,11 +1,9 @@
-
 import Footer from '../components/Footer'
 import TitleContainer from '../components/TitleContainer'
 
 function Home() {
   return (
-    <div>
-
+    <div className="">
       <TitleContainer />
       <Footer />
     </div>
