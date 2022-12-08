@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import missing from '../assets/missing.jpg'
 
 function Calendar() {
   const [today, setToday] = useState([])
@@ -38,12 +39,17 @@ function Calendar() {
           </tr>
         </thead>
         <tbody className=''>
-          {today.map((newEp) => {
+          {today.map((newEp, i) => {
+            const imgPath = newEp._embedded.show.image
             return (
-              <tr className='align-middle'>
+              <tr className='align-middle' key={i}>
                 <td className='d-md-table-cell d-none'>
                   <img
-                    src={newEp._embedded.show.image.medium}
+                    src={
+                      imgPath && imgPath.medium !== null
+                        ? imgPath.medium
+                        : missing
+                    }
                     style={{ width: '7rem' }}
                     alt=''
                     className=''
