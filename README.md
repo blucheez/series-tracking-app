@@ -1,6 +1,7 @@
 # TV Series Tracker App
 
-This is a React / Firebase v9 project for practice purposes.
+This is a React / Firebase v9 project for practice purposes. In this project I mainly focused on functionality rather than design.
+
 You can authenticate with email or a google account.
 You can search for TV shows and add them to your profile page
 On the profile page, you can find your shows listed with details.
